@@ -10,20 +10,171 @@
         android:id="@+id/textview_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="452dp"
         android:text="move blocks to unlock"
         app:layout_constraintBottom_toTopOf="@id/button_blockunlock"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_blockunlock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="101dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="60dp"
         android:text="unlock"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="394dp"
+        android:layout_height="394dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_blockunlock"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_first" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_first">
+
+        <ImageView
+            android:id="@+id/imageView38"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="394dp"
+            android:layout_height="394dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/grid10"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+                <ImageView
+                    android:id="@+id/grid11"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+                <ImageView
+                    android:id="@+id/grid12"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/grid1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+                <ImageView
+                    android:id="@+id/grid2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+                <ImageView
+                    android:id="@+id/grid3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:contentDescription="TODO"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/grid7"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+                <ImageView
+                    android:id="@+id/grid8"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+                <ImageView
+                    android:id="@+id/grid9"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:src="?android:attr/listChoiceIndicatorMultiple" />
+
+            </TableRow>
+        </TableLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/block2"
+                android:layout_width="96dp"
+                android:layout_height="229dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:src="@android:drawable/editbox_dropdown_dark_frame"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.51"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/block1"
+                android:layout_width="114dp"
+                android:layout_height="114dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:src="@android:drawable/editbox_dropdown_dark_frame" />
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
