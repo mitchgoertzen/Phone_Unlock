@@ -3,26 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/HomeScreen">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.phoneunlock.FirstFragment"
+        android:id="@+id/HomeScreen"
+        android:name="com.example.phoneunlock.HomeScreen"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/home_screen">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/Home_to_Block"
+            app:destination="@id/BlockUnlock" />
+        <action
+            android:id="@+id/Home_to_Light"
+            app:destination="@id/LightUnlock" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.phoneunlock.SecondFragment"
+        android:id="@+id/BlockUnlock"
+        android:name="com.example.phoneunlock.BlockUnlock"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/block_unlock">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/HomeScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/LightUnlock"
+        android:name="com.example.phoneunlock.LightUnlock"
+        android:label="LightUnlock" >
+        <action
+            android:id="@+id/action_lightUnlock_to_HomeScreen"
+            app:destination="@id/HomeScreen" />
     </fragment>
 </navigation>
