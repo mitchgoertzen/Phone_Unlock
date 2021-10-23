@@ -5,8 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsoluteLayout;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -37,33 +40,47 @@ public class BlockUnlock extends Fragment {
             }
         });
 
-        view.findViewById(R.id.block1).setOnClickListener(new View.OnClickListener() {
+//        view.findViewById(R.id.block1).setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(final View view) {
+//                doSomething(view);
+//            }
+//        });
 
+
+        RelativeLayout rl = view.findViewById(R.id.relativeLayout);
+        Button myButton = new Button(getContext());
+        myButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 doSomething(view);
             }
         });
+        myButton.setHeight(361);
+        myButton.setWidth(361);
+        myButton.setLeft(0);
+        myButton.setTop(0);
+        myButton.setRight(0);
+        myButton.setBottom(0);
+        myButton.setX(0);
+        myButton.setY(401);
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(500, 600);
+//        params.leftMargin = 100;
+//        params.topMargin = 300;
+        rl.addView(myButton);
 
-        view.findViewById(R.id.block2).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(final View view) {
-                doSomething(view);
-            }
-        });
-
-
-
-
-
+//        ImageButton button = view.findViewById(R.id.block1);
+//        button.setX(0);
+//        button.setY(625);
     }
 
     public void doSomething(final View view){
         view.setOnTouchListener(new OnSwipeTouchListener() {
             public boolean onSwipeTop() {
-                if(view.getY() > 0)
+                if(view.getY() > 361)
                     view.animate().translationYBy(-height);
+                Log.d("Y", String.valueOf(view.getY()));
                 return true;
             }
             public boolean onSwipeRight() {
@@ -78,7 +95,7 @@ public class BlockUnlock extends Fragment {
                 return true;
             }
             public boolean onSwipeBottom() {
-                if(view.getY() < 722)
+                if(view.getY() < 986)
                     view.animate().translationYBy(height);
                 Log.d("Y", String.valueOf(view.getY()));
                 return true;
@@ -108,6 +125,7 @@ public class BlockUnlock extends Fragment {
                         locationOnScreen = new int[2];
                         gridSpace.getLocationInWindow(locationOnScreen);
                         Log.d("Grid " + String.valueOf(j), locationOnScreen[0] + ", " + locationOnScreen[1]);
+                        Log.d("Size " + String.valueOf(j), gridSpace.getHeight() + ", " + gridSpace.getWidth() + "\n");
                     }
 
                 }
