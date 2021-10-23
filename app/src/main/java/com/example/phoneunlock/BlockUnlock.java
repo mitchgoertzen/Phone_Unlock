@@ -2,12 +2,11 @@ package com.example.phoneunlock;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -15,11 +14,23 @@ import android.widget.TableRow;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
+
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BlockUnlock extends Fragment {
+
     TableLayout table;
     int height;
+    HashMap<Pair<Integer, Integer>, Integer> gridValues = new HashMap<>();
+    int currentCode[] = new int[9];
+    private int securityCode[] = {1, 6, 3, 8, 4, 7, 5, 0, 2};
+    Set<Pair<Integer, Integer>> keys;
+    TableRow row;
+    ImageView gridSpace;
+    int[] locationOnScreen;
 
     @Override
     public View onCreateView(
@@ -40,45 +51,33 @@ public class BlockUnlock extends Fragment {
             }
         });
 
-//        view.findViewById(R.id.block1).setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(final View view) {
-//                doSomething(view);
-//            }
-//        });
-
-
-        RelativeLayout rl = view.findViewById(R.id.relativeLayout);
-        Button myButton = new Button(getContext());
-        myButton.setOnClickListener(new View.OnClickListener() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
-            public void onClick(final View view) {
-                doSomething(view);
-            }
-        });
-        myButton.setHeight(361);
-        myButton.setWidth(361);
-        myButton.setLeft(0);
-        myButton.setTop(0);
-        myButton.setRight(0);
-        myButton.setBottom(0);
-        myButton.setX(0);
-        myButton.setY(401);
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(500, 600);
-//        params.leftMargin = 100;
-//        params.topMargin = 300;
-        rl.addView(myButton);
+            public void run() {
 
-//        ImageButton button = view.findViewById(R.id.block1);
-//        button.setX(0);
-//        button.setY(625);
+                boolean correctCode = true;
+
+                for(int i = 0;i<9;i++){
+                    if(securityCode[i] != currentCode[i]){
+                        correctCode = false;
+                        break;
+                    }
+                }
+                if(correctCode){
+                   // System.exit(0);
+                    Log.d("Check", "This is the correct code");
+                }else{
+                    Log.d("Check", "This is not the correct code");
+                }
+            }
+        }, 0, 1000);
+
     }
 
     public void doSomething(final View view){
         view.setOnTouchListener(new OnSwipeTouchListener() {
             public boolean onSwipeTop() {
-                if(view.getY() > 361)
+                if(view.getY() > 402)
                     view.animate().translationYBy(-height);
                 Log.d("Y", String.valueOf(view.getY()));
                 return true;
@@ -106,6 +105,7 @@ public class BlockUnlock extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        final RelativeLayout rl = getView().findViewById(R.id.relativeLayout);
 
         getView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -113,10 +113,7 @@ public class BlockUnlock extends Fragment {
                 getView().removeOnLayoutChangeListener(this);
                 height = v.findViewById(R.id.grid1).getHeight();
                 table = v.findViewById(R.id.tableLayout);
-
-                TableRow row;
-                ImageView gridSpace;
-                int[] locationOnScreen;
+                keys = gridValues.keySet();
 
                 for(int i = 0;i< 3;i++){
                     row = (TableRow) table.getChildAt(i);
@@ -124,13 +121,61 @@ public class BlockUnlock extends Fragment {
                         gridSpace = (ImageView) row.getChildAt(j);
                         locationOnScreen = new int[2];
                         gridSpace.getLocationInWindow(locationOnScreen);
-                        Log.d("Grid " + String.valueOf(j), locationOnScreen[0] + ", " + locationOnScreen[1]);
-                        Log.d("Size " + String.valueOf(j), gridSpace.getHeight() + ", " + gridSpace.getWidth() + "\n");
+                        gridValues.put(new Pair<>(locationOnScreen[0], locationOnScreen[1]),0);
+                        Log.d("Grid " + j, locationOnScreen[0] + ", " + locationOnScreen[1]);
+                        Log.d("Size " + j, gridSpace.getHeight() + ", " + gridSpace.getWidth() + "\n");
                     }
 
                 }
+
+                int i = 1;
+                for(Pair<Integer, Integer> key: keys){
+                    Log.d("Value of "+key+" is", gridValues.get(key) + "\n");
+                    gridValues.put(key, i);
+                    Button myButton = new Button(getContext());
+                    myButton.setId(i);
+                    final int id_ = myButton.getId();
+                    myButton.setText(String.valueOf(id_));
+                    myButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(final View view) {
+                            doSomething(view);
+                        }
+                    });
+                    myButton.setHeight(361);
+                    myButton.setWidth(361);
+                    myButton.setLeft(0);
+                    myButton.setTop(0);
+                    myButton.setRight(0);
+                    myButton.setBottom(0);
+                    myButton.setX(key.first);
+                    myButton.setY(key.second - 223);
+                    rl.addView(myButton);
+
+                    if(i >= 8){
+                        break;
+                    }
+                    else{
+                        i++;
+                    }
+                }
+
+                int count = 0;
+                for(int y = 625; y < 1708;y+=361){
+                    for(int x = 0;x < 1083;x+=361){
+                        currentCode[count] = gridValues.get(new Pair<>(x, y));
+                        count++;
+                    }
+                }
+
+
+//                for(int j = 0;j<9;j++){
+//                    Log.d("Code", currentCode[j] + "\n");
+//                }
             }
         });
+
+
 
 
     }
