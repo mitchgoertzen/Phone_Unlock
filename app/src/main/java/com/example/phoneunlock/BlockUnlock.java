@@ -12,6 +12,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,7 +46,8 @@ public class BlockUnlock extends Fragment {
         view.findViewById(R.id.button_blockunlock).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.exit(0);
+                NavHostFragment.findNavController(BlockUnlock.this)
+                        .navigate(R.id.action_BlockUnlock_self);
             }
         });
 
@@ -61,6 +64,14 @@ public class BlockUnlock extends Fragment {
                     }
                 }
                 if(correctCode){
+
+                    synchronized (this) {
+                        try {
+                            this.wait(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     System.exit(0);
                 }
 
