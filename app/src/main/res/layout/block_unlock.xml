@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#C6B3B3"
     tools:context=".BlockUnlock">
 
     <TextView
@@ -13,6 +14,9 @@
         android:layout_marginTop="32dp"
         android:layout_marginBottom="452dp"
         android:text="Move the Blocks to Unlock"
+        android:textColor="#CE000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/button_blockunlock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,11 +45,11 @@
             android:id="@+id/imageView38"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:src="@drawable/ic_launcher_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/grid" />
 
         <TableLayout
             android:id="@+id/tableLayout"
