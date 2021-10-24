@@ -1,16 +1,29 @@
 package com.example.phoneunlock;
 
+import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -27,7 +40,7 @@ public class BlockUnlock extends Fragment {
     private TableRow row;
     private ImageView gridSpace;
     private int[] locationOnScreen;
-    private Button[] buttons = new Button[8];
+    private ImageButton[] buttons = new ImageButton[8];
     private int buttonHeight;
     private int minX,  maxX, minY, maxY;
 
@@ -36,7 +49,6 @@ public class BlockUnlock extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.block_unlock, container, false);
     }
 
@@ -52,6 +64,7 @@ public class BlockUnlock extends Fragment {
         });
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void run() {
 
@@ -64,10 +77,14 @@ public class BlockUnlock extends Fragment {
                     }
                 }
                 if(correctCode){
-
+                    for(ImageButton b : buttons){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            b.setForegroundTintList(ColorStateList.valueOf(Color.argb(100, 10,255,0)));
+                        }
+                    }
                     synchronized (this) {
                         try {
-                            this.wait(50);
+                            this.wait(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -76,7 +93,7 @@ public class BlockUnlock extends Fragment {
                 }
 
             }
-        }, 0, 1000);
+        }, 0, 500);
 
     }
 
@@ -142,6 +159,7 @@ public class BlockUnlock extends Fragment {
         final RelativeLayout rl = getView().findViewById(R.id.relativeLayout);
 
         getView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 getView().removeOnLayoutChangeListener(this);
@@ -163,30 +181,70 @@ public class BlockUnlock extends Fragment {
                         float y = locationOnScreen[1];
                         if(count < 8){
 
-                            buttons[count] = new Button(getContext());
+                            buttons[count] = new ImageButton(getContext());
+                            buttons[count].setLayoutParams(new LinearLayout.LayoutParams(height-10, height-10));
                             buttons[count].setId(count + 1);
                             final int id_ =  buttons[count].getId();
-                            buttons[count].setText(String.valueOf(id_));
+                            Drawable number;
+                            switch(id_){
+                                case 1:{
+                                    number = getResources().getDrawable(R.drawable.one);
+                                }
+                                break;
+                                case 2:{
+                                    number = getResources().getDrawable(R.drawable.two);
+                                }
+                                break;
+                                case 3:{
+                                    number = getResources().getDrawable(R.drawable.three);
+                                }
+                                break;
+                                case 4:{
+                                    number = getResources().getDrawable(R.drawable.four);
+                                }
+                                break;
+                                case 5:{
+                                    number = getResources().getDrawable(R.drawable.five);
+                                }
+                                break;
+                                case 6:{
+                                    number = getResources().getDrawable(R.drawable.six);
+                                }
+                                break;
+                                case 7:{
+                                    number = getResources().getDrawable(R.drawable.seven);
+                                }
+                                break;
+                                case 8:{
+                                    number = getResources().getDrawable(R.drawable.eight);
+                                }
+                                break;
+                                default:{
+                                    number = null;
+                                }
+                            }
+                            buttons[count].setForeground(number);
                             buttons[count].setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View view) {
                             doSomething(view);
                             }
                             });
-                            buttons[count].setHeight(gridSpace.getHeight());
-                            buttons[count].setWidth(gridSpace.getWidth());
+
+                            buttons[count].setBackgroundResource(R.drawable.woodblock);
+                            buttons[count].setScaleType(ImageView.ScaleType.FIT_XY);
                             buttons[count].setLeft(0);
                             buttons[count].setTop(0);
                             buttons[count].setRight(0);
                             buttons[count].setBottom(0);
                             buttons[count].setX(locationOnScreen[0]);
-                            buttons[count].setY(locationOnScreen[1] - 225);
+                            buttons[count].setY(locationOnScreen[1] - 280);
                             rl.addView( buttons[count]);
 
                             gridValues.put(new Pair<>((int)buttons[count].getX(), (int)buttons[count].getY()),id_);
                             count++;
                         }else{
-                            gridValues.put(new Pair<>((int)x, (int)y-225),0);
+                            gridValues.put(new Pair<>((int)x, (int)y-280),0);
                         }
                     }
                 }
