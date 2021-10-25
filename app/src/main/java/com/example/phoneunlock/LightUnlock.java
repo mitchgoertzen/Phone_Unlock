@@ -76,8 +76,9 @@ public class LightUnlock extends Fragment implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+
         // When sensor is covered
-        if (sensorEvent.values[0] == 0){
+        if (sensorEvent.values[0] < 10000){
             timerView.setBackgroundColor(Color.parseColor("#cccccc"));
             if(intervalStart == 0){
                 msgView.setText("");
