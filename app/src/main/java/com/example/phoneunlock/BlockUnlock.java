@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,9 +73,16 @@ public class BlockUnlock extends Fragment {
                     }
                 }
                 if(correctCode){
+                    synchronized (this) {
+                        try {
+                            this.wait(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     for(ImageButton b : buttons){
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            b.setForegroundTintList(ColorStateList.valueOf(Color.argb(100, 10,255,0)));
+                            b.setForegroundTintList(ColorStateList.valueOf(Color.argb(100, 255,255,255)));
                         }
                     }
                     synchronized (this) {
@@ -91,7 +100,7 @@ public class BlockUnlock extends Fragment {
 
     }
 
-    public void doSomething(final View view){
+    public void onSwipe(final View view){
         final float x = view.getX();
         final float y = view.getY();
         final Pair loc = new Pair<>((int)x, (int)y);
@@ -159,7 +168,7 @@ public class BlockUnlock extends Fragment {
                 getView().removeOnLayoutChangeListener(this);
                 height = v.findViewById(R.id.grid1).getHeight();
                 table = v.findViewById(R.id.tableLayout);
-
+                int yOffset = 110;
                 row = (TableRow) table.getChildAt(0);
                 buttonHeight = row.getChildAt(0).getHeight();
 
@@ -174,9 +183,8 @@ public class BlockUnlock extends Fragment {
                         float x = locationOnScreen[0];
                         float y = locationOnScreen[1];
                         if(count < 8){
-
                             buttons[count] = new ImageButton(getContext());
-                            buttons[count].setLayoutParams(new LinearLayout.LayoutParams(height-10, height-10));
+                            buttons[count].setLayoutParams(new LinearLayout.LayoutParams(height-20, height-20));
                             buttons[count].setId(count + 1);
                             final int id_ =  buttons[count].getId();
                             Drawable number;
@@ -221,7 +229,7 @@ public class BlockUnlock extends Fragment {
                             buttons[count].setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View view) {
-                            doSomething(view);
+                            onSwipe(view);
                             }
                             });
 
@@ -232,13 +240,13 @@ public class BlockUnlock extends Fragment {
                             buttons[count].setRight(0);
                             buttons[count].setBottom(0);
                             buttons[count].setX(locationOnScreen[0]);
-                            buttons[count].setY(locationOnScreen[1] - 280);
+                            buttons[count].setY(locationOnScreen[1]-yOffset);
                             rl.addView( buttons[count]);
 
                             gridValues.put(new Pair<>((int)buttons[count].getX(), (int)buttons[count].getY()),id_);
                             count++;
                         }else{
-                            gridValues.put(new Pair<>((int)x, (int)y-280),0);
+                            gridValues.put(new Pair<>((int)x, (int)y-yOffset),0);
                         }
                     }
                 }
