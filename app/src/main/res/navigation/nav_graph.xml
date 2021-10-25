@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/HomeScreen" />
+        <action
+            android:id="@+id/action_BlockUnlock_self"
+            app:destination="@id/BlockUnlock" />
     </fragment>
     <fragment
         android:id="@+id/LightUnlock"

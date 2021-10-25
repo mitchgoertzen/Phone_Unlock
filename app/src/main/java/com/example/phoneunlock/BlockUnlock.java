@@ -1,17 +1,28 @@
 package com.example.phoneunlock;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,7 +36,7 @@ public class BlockUnlock extends Fragment {
     private TableRow row;
     private ImageView gridSpace;
     private int[] locationOnScreen;
-    private Button[] buttons = new Button[8];
+    private ImageButton[] buttons = new ImageButton[8];
     private int buttonHeight;
     private int minX,  maxX, minY, maxY;
 
@@ -34,7 +45,6 @@ public class BlockUnlock extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.block_unlock, container, false);
     }
 
@@ -44,11 +54,13 @@ public class BlockUnlock extends Fragment {
         view.findViewById(R.id.button_blockunlock).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.exit(0);
+                NavHostFragment.findNavController(BlockUnlock.this)
+                        .navigate(R.id.action_BlockUnlock_self);
             }
         });
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void run() {
 
@@ -61,15 +73,34 @@ public class BlockUnlock extends Fragment {
                     }
                 }
                 if(correctCode){
+                    synchronized (this) {
+                        try {
+                            this.wait(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    for(ImageButton b : buttons){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            b.setForegroundTintList(ColorStateList.valueOf(Color.argb(100, 255,255,255)));
+                        }
+                    }
+                    synchronized (this) {
+                        try {
+                            this.wait(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     System.exit(0);
                 }
 
             }
-        }, 0, 1000);
+        }, 0, 500);
 
     }
 
-    public void doSomething(final View view){
+    public void onSwipe(final View view){
         final float x = view.getX();
         final float y = view.getY();
         final Pair loc = new Pair<>((int)x, (int)y);
@@ -131,12 +162,13 @@ public class BlockUnlock extends Fragment {
         final RelativeLayout rl = getView().findViewById(R.id.relativeLayout);
 
         getView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 getView().removeOnLayoutChangeListener(this);
                 height = v.findViewById(R.id.grid1).getHeight();
                 table = v.findViewById(R.id.tableLayout);
-
+                int yOffset = 110;
                 row = (TableRow) table.getChildAt(0);
                 buttonHeight = row.getChildAt(0).getHeight();
 
@@ -151,31 +183,70 @@ public class BlockUnlock extends Fragment {
                         float x = locationOnScreen[0];
                         float y = locationOnScreen[1];
                         if(count < 8){
-
-                            buttons[count] = new Button(getContext());
+                            buttons[count] = new ImageButton(getContext());
+                            buttons[count].setLayoutParams(new LinearLayout.LayoutParams(height-20, height-20));
                             buttons[count].setId(count + 1);
                             final int id_ =  buttons[count].getId();
-                            buttons[count].setText(String.valueOf(id_));
+                            Drawable number;
+                            switch(id_){
+                                case 1:{
+                                    number = getResources().getDrawable(R.drawable.one);
+                                }
+                                break;
+                                case 2:{
+                                    number = getResources().getDrawable(R.drawable.two);
+                                }
+                                break;
+                                case 3:{
+                                    number = getResources().getDrawable(R.drawable.three);
+                                }
+                                break;
+                                case 4:{
+                                    number = getResources().getDrawable(R.drawable.four);
+                                }
+                                break;
+                                case 5:{
+                                    number = getResources().getDrawable(R.drawable.five);
+                                }
+                                break;
+                                case 6:{
+                                    number = getResources().getDrawable(R.drawable.six);
+                                }
+                                break;
+                                case 7:{
+                                    number = getResources().getDrawable(R.drawable.seven);
+                                }
+                                break;
+                                case 8:{
+                                    number = getResources().getDrawable(R.drawable.eight);
+                                }
+                                break;
+                                default:{
+                                    number = null;
+                                }
+                            }
+                            buttons[count].setForeground(number);
                             buttons[count].setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View view) {
-                            doSomething(view);
+                            onSwipe(view);
                             }
                             });
-                            buttons[count].setHeight(gridSpace.getHeight());
-                            buttons[count].setWidth(gridSpace.getWidth());
+
+                            buttons[count].setBackgroundResource(R.drawable.woodblock);
+                            buttons[count].setScaleType(ImageView.ScaleType.FIT_XY);
                             buttons[count].setLeft(0);
                             buttons[count].setTop(0);
                             buttons[count].setRight(0);
                             buttons[count].setBottom(0);
                             buttons[count].setX(locationOnScreen[0]);
-                            buttons[count].setY(locationOnScreen[1] - 225);
+                            buttons[count].setY(locationOnScreen[1]-yOffset);
                             rl.addView( buttons[count]);
 
                             gridValues.put(new Pair<>((int)buttons[count].getX(), (int)buttons[count].getY()),id_);
                             count++;
                         }else{
-                            gridValues.put(new Pair<>((int)x, (int)y-225),0);
+                            gridValues.put(new Pair<>((int)x, (int)y-yOffset),0);
                         }
                     }
                 }
