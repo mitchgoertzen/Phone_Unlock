@@ -82,7 +82,7 @@ public class BlockUnlock extends Fragment {
                     }
                     for(ImageButton b : buttons){
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            b.setForegroundTintList(ColorStateList.valueOf(Color.argb(100, 255,255,255)));
+                            b.setForegroundTintList(ColorStateList.valueOf(Color.argb(100, 0,255,5)));
                         }
                     }
                     synchronized (this) {
@@ -226,13 +226,15 @@ public class BlockUnlock extends Fragment {
                                 }
                             }
                             buttons[count].setForeground(number);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                buttons[count].setForegroundTintList(ColorStateList.valueOf(Color.argb(100, 255,255,255)));
+                            }
                             buttons[count].setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View view) {
                             onSwipe(view);
                             }
                             });
-
                             buttons[count].setBackgroundResource(R.drawable.woodblock);
                             buttons[count].setScaleType(ImageView.ScaleType.FIT_XY);
                             buttons[count].setLeft(0);
